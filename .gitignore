@@ -1,0 +1,25 @@
+# Raw data is large and re-downloadable via src/download_data.py -- do not commit.
+data/raw/*
+!data/raw/.gitkeep
+!data/raw/README.md
+
+# Processed data is regenerable from the raw extract.
+data/processed/*
+!data/processed/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+*.egg-info/
+
+# Notebooks
+.ipynb_checkpoints/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
