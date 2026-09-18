@@ -43,6 +43,11 @@ from features import DAY_NAME_ORDER, TIME_PERIOD_ORDER, rate_table, wilson_inter
 MIN_RELIABLE_N = 500
 
 
+def _plural(n, noun):
+    """e.g. 1 -> '1 fatal crash', 3 -> '3 fatal crashes'."""
+    return f"{n:,} {noun}" if n == 1 else f"{n:,} {noun}es" if noun.endswith("sh") else f"{n:,} {noun}s"
+
+
 def pct(x, digits=1):
     return f"{x:.{digits}f}%"
 
@@ -98,6 +103,7 @@ def build_tables(df: pd.DataFrame) -> dict[str, pd.DataFrame]:
     clean_h = rate_table(df[~df["midnight_placeholder"]], "crash_hour", "fatal_crash", MIN_RELIABLE_N)
     clean_h = clean_h.set_index("crash_hour")
     hourly["n_excl_placeholder"] = hourly["crash_hour"].map(clean_h["n"])
+    hourly["fatal_crashes_excl_placeholder"] = hourly["crash_hour"].map(clean_h["successes"])
     hourly["fatal_per_1k_excl_placeholder"] = hourly["crash_hour"].map(clean_h["rate"]) * 1000
     hourly["fatal_per_1k_excl_low"] = hourly["crash_hour"].map(clean_h["ci_low"]) * 1000
     hourly["fatal_per_1k_excl_high"] = hourly["crash_hour"].map(clean_h["ci_high"]) * 1000
@@ -386,7 +392,7 @@ def write_summary(df: pd.DataFrame, t: dict[str, pd.DataFrame], path: Path) -> N
         A(f"| {label} | {int(r.n):,} | {r.injury_rate_pct:.2f}% | {int(r.fatal_crashes):,} | {r.fatal_per_1k:.2f} |")
     A("")
     A("**This is the decisive evidence.** Records stamped exactly `00:00` contain "
-      f"{int(sens.loc['hour 0, exactly 00:00 only', 'fatal_crashes'])} fatal crash(es) in "
+      f"{_plural(int(sens.loc['hour 0, exactly 00:00 only', 'fatal_crashes']), 'fatal crash')} in "
       f"{int(sens.loc['hour 0, exactly 00:00 only', 'n']):,} records. Every neighbouring hour of the "
       "night runs 50-70 fatal crashes on a smaller base. A genuine hour of the night cannot")
     A("look like that, so `00:00` is behaving as a default value written when the true")
@@ -437,11 +443,14 @@ def write_summary(df: pd.DataFrame, t: dict[str, pd.DataFrame], path: Path) -> N
     A("")
     A("### 5.2 Hour-by-hour detail")
     A("")
-    A("| Hour | Crashes | % of all | Injury-crash rate | 95% CI | Fatal crashes | Fatal per 1,000 (excl. 00:00 flag) |")
+    A("| Hour | Crashes | % of all | Injury-crash rate | 95% CI | Fatal crashes* | Fatal per 1,000* |")
     A("|---|---:|---:|---:|---|---:|---:|")
     for _, r in h.iterrows():
         A(f"| {hour_range_label(r.crash_hour)} | {int(r.n):,} | {r.share_of_all_crashes_pct:.1f}% | "
-          f"{r.rate_pct:.1f}% | {r.ci_low_pct:.1f}-{r.ci_high_pct:.1f}% | {int(r.fatal_crashes)} | {r.fatal_per_1k_excl_placeholder:.2f} |")
+          f"{r.rate_pct:.1f}% | {r.ci_low_pct:.1f}-{r.ci_high_pct:.1f}% | {int(r.fatal_crashes_excl_placeholder)} | {r.fatal_per_1k_excl_placeholder:.2f} |")
+    A("")
+    A("\* Fatal columns exclude the 8,527 records timestamped exactly 00:00 (see section 4); "
+      "all other columns use every record. Only the 12 AM row is affected.")
     A("")
     A("### 5.3 By time period")
     A("")

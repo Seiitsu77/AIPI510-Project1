@@ -56,7 +56,7 @@
 
 **Say:** "I expected late nights to be when crashes turn serious. They're not — they're the *least* likely to injure anyone. 33% at 2 AM, versus 45% at 9 PM. My hypothesis was backwards.
 
-But look at the third panel. Swap 'injured' for 'killed' and the day flips over. Overnight crashes are the *most* likely to be fatal — about 7 per thousand at 3 AM versus 1 per thousand at 4 PM. Seven times higher, and the confidence intervals don't overlap.
+But look at the third panel. Swap 'injured' for 'killed' and the day flips over. Overnight crashes are the *most* likely to be fatal — about 7 per thousand at 3 AM versus 1 per thousand at 4 PM. That's 6.6 times higher, and the confidence intervals don't overlap.
 
 So there are three peaks at three different times. Most crashes: 5 PM. Most likely to injure: 9 PM. Most likely to kill: 3 AM. The small hours produce very few crashes, and most hurt nobody — but the ones that go wrong go badly wrong."
 

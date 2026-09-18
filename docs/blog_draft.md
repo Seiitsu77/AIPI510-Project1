@@ -50,7 +50,7 @@ At this point the folk wisdom about late nights looked simply wrong. But it depe
 
 Swap "did anyone get injured?" for "did anyone die?" and the day flips over.
 
-Overnight crashes are, by a wide margin, the most likely to be fatal. Between 3 and 4 AM, about **7 in every 1,000 reported crashes** involve a death. At 4 to 5 PM — the busiest hour on the road — it is **about 1 in 1,000.** That is a sevenfold difference, and it is far too large to be a fluke of the numbers.
+Overnight crashes are, by a wide margin, the most likely to be fatal. Between 3 and 4 AM, about **7 in every 1,000 reported crashes** involve a death. At 4 to 5 PM — the busiest hour on the road — it is **about 1 in 1,000.** That is nearly a sevenfold difference — 6.6 times — and it is far too large to be a fluke of the numbers.
 
 ![Three different clocks](../figures/fig3_three_clocks.png)
 

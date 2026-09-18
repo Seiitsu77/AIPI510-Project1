@@ -118,7 +118,7 @@ vulnerable_road_user_injury = pedestrian_injury_crash or cyclist_injury_crash
 ```
 download_data.py  ->  data/raw/nyc_crashes_2021_2025.csv     (API, server-side year filter)
 preprocess.py     ->  data/processed/crashes_clean.parquet   (clean + features, 0 rows dropped)
-analysis.py       ->  outputs/summary_tables/*.csv           (14 tables)
+analysis.py       ->  outputs/summary_tables/*.csv           (14 tables; 2 more come from preprocess.py)
                       outputs/analysis_summary.md            (the evidence base)
 visualize.py      ->  figures/*.png + *.svg                  (5 figures)
 ```
@@ -217,7 +217,7 @@ Expected outputs:
 | `data/raw/nyc_crashes_2021_2025.csv` | 487,914 rows, ~115 MB (**not committed** — see `.gitignore`) |
 | `data/raw/nyc_crashes_2021_2025.csv.meta.json` | Query, retrieval timestamp, row count |
 | `data/processed/crashes_clean.parquet` | 487,914 rows × 49 columns |
-| `outputs/summary_tables/*.csv` | 14 summary tables |
+| `outputs/summary_tables/*.csv` | 16 summary tables (14 from `analysis.py`, plus `missingness.csv` and `filter_ledger.csv` from `preprocess.py`) |
 | `outputs/analysis_summary.md` | The evidence base |
 | `figures/*.png`, `figures/*.svg` | 5 figures |
 

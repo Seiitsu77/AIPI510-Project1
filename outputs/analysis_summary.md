@@ -89,7 +89,7 @@ The geographic fields are not, which is why they do not.
 | all hours, all records | 487,914 | 40.02% | 1,304 | 2.67 |
 | all hours, excluding 00:00 | 479,387 | 40.05% | 1,303 | 2.72 |
 
-**This is the decisive evidence.** Records stamped exactly `00:00` contain 1 fatal crash(es) in 8,527 records. Every neighbouring hour of the night runs 50-70 fatal crashes on a smaller base. A genuine hour of the night cannot
+**This is the decisive evidence.** Records stamped exactly `00:00` contain 1 fatal crash in 8,527 records. Every neighbouring hour of the night runs 50-70 fatal crashes on a smaller base. A genuine hour of the night cannot
 look like that, so `00:00` is behaving as a default value written when the true
 time was not known.
 
@@ -124,9 +124,9 @@ over-read. Grouped into time periods (section 5.3) it is much more stable.
 
 ### 5.2 Hour-by-hour detail
 
-| Hour | Crashes | % of all | Injury-crash rate | 95% CI | Fatal crashes | Fatal per 1,000 (excl. 00:00 flag) |
+| Hour | Crashes | % of all | Injury-crash rate | 95% CI | Fatal crashes* | Fatal per 1,000* |
 |---|---:|---:|---:|---|---:|---:|
-| 12 AM-1 AM | 22,133 | 4.5% | 38.5% | 37.8-39.1% | 70 | 5.07 |
+| 12 AM-1 AM | 22,133 | 4.5% | 38.5% | 37.8-39.1% | 69 | 5.07 |
 | 1 AM-2 AM | 11,741 | 2.4% | 34.8% | 33.9-35.6% | 53 | 4.51 |
 | 2 AM-3 AM | 9,489 | 1.9% | 33.3% | 32.4-34.3% | 60 | 6.32 |
 | 3 AM-4 AM | 8,678 | 1.8% | 33.3% | 32.3-34.3% | 62 | 7.14 |
@@ -150,6 +150,8 @@ over-read. Grouped into time periods (section 5.3) it is much more stable.
 | 9 PM-10 PM | 19,539 | 4.0% | 45.3% | 44.6-46.0% | 73 | 3.74 |
 | 10 PM-11 PM | 18,180 | 3.7% | 43.2% | 42.4-43.9% | 76 | 4.18 |
 | 11 PM-12 AM | 16,504 | 3.4% | 40.2% | 39.4-40.9% | 70 | 4.24 |
+
+\* Fatal columns exclude the 8,527 records timestamped exactly 00:00 (see section 4); all other columns use every record. Only the 12 AM row is affected.
 
 ### 5.3 By time period
 
