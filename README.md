@@ -214,9 +214,10 @@ Expected outputs:
 
 | Path | Contents |
 |---|---|
-| `data/raw/nyc_crashes_2021_2025.csv` | 487,914 rows, ~115 MB (**not committed** — see `.gitignore`) |
-| `data/raw/nyc_crashes_2021_2025.csv.meta.json` | Query, retrieval timestamp, row count |
-| `data/processed/crashes_clean.parquet` | 487,914 rows × 49 columns |
+| `data/raw/nyc_crashes_2021_2025.csv` | 487,914 rows, ~115 MB — **not committed**, see below |
+| `data/raw/sample_nyc_crashes_1000.csv` | 1,000-row sample of the raw extract (**committed**) |
+| `data/raw/nyc_crashes_2021_2025.csv.meta.json` | Query, retrieval timestamp, row count (**committed**) |
+| `data/processed/crashes_clean.parquet` | 487,914 rows × 49 columns, ~23 MB (**committed**) |
 | `outputs/summary_tables/*.csv` | 16 summary tables (14 from `analysis.py`, plus `missingness.csv` and `filter_ledger.csv` from `preprocess.py`) |
 | `outputs/analysis_summary.md` | The evidence base |
 | `figures/*.png`, `figures/*.svg` | 5 figures |
@@ -228,7 +229,11 @@ python src/download_data.py --start-year 2023 --end-year 2025 --force
 python src/preprocess.py --start-year 2023 --end-year 2025
 ```
 
-Raw data is gitignored because it is ~115 MB and fully regenerable from the documented API query. Nothing in the repository depends on it being committed.
+### A note on the data files
+
+The **cleaned dataset is committed** (`data/processed/crashes_clean.parquet`, ~23 MB), so the analysis can be re-run and checked without touching the API.
+
+The **full raw extract is not**, and cannot be: at ~115 MB it exceeds GitHub's 100 MB per-file hard limit. In its place the repository carries a real 1,000-row sample (`data/raw/sample_nyc_crashes_1000.csv`) so the raw schema is inspectable, the retrieval metadata, and a single command that reproduces the full file exactly. See [`data/raw/README.md`](data/raw/README.md).
 
 ## 14. Repository Structure
 
@@ -239,8 +244,9 @@ Raw data is gitignored because it is ~115 MB and fully regenerable from the docu
 ├── .gitignore
 │
 ├── data/
-│   ├── raw/                  # API extract (gitignored) + retrieval metadata
-│   └── processed/            # crashes_clean.parquet (gitignored, regenerable)
+│   ├── raw/                  # 1,000-row sample + retrieval metadata
+│   │                         # (full 115 MB extract is gitignored: over GitHub's limit)
+│   └── processed/            # crashes_clean.parquet (committed, ~23 MB)
 │
 ├── src/
 │   ├── download_data.py      # Socrata API -> raw CSV, paginated and verified
@@ -267,18 +273,30 @@ The notebook is for exploration only. Every piece of logic lives in `src/` and t
 
 ## 15. Team Workflow / Git Collaboration
 
-Branches are organised so two people can work without collisions:
+Nothing reaches `main` except through a reviewed pull request. `main` starts at
+the project scaffolding and is built up one PR at a time:
 
-| Branch | Scope | Files |
+| Branch | Scope | Merges into |
 |---|---|---|
 | `main` | Reviewed, working pipeline | — |
-| `feature/data-preprocessing` | Acquisition, cleaning, features | `src/download_data.py`, `src/preprocess.py`, `src/features.py` |
-| `feature/eda-visualization` | Analysis, figures, write-ups | `src/analysis.py`, `src/visualize.py`, `docs/`, `notebooks/` |
+| `feature/data-preprocessing` | Acquisition, cleaning, feature engineering | `main` |
+| `feature/eda-visualization` | Analysis, figures, write-ups | `main`, after the above |
 
-The split is deliberate: the two branches touch disjoint file sets, so they can be developed in parallel and merged without conflicts.
+The split follows the two halves of the pipeline: one branch is responsible for
+producing a trustworthy dataset, the other for everything that reads from it.
+They touch nearly disjoint file sets.
 
-Conventions:
+### Conventions
 
-- Work happens on a feature branch and reaches `main` through a pull request, never a direct push.
-- A PR is expected to state which commands were run and what changed in `outputs/analysis_summary.md`, since that file is the shared source of truth for every number in the blog and slides.
-- Re-run the full four-command pipeline before opening a PR. Because figures are built from the summary CSVs, a stale figure is a review-catchable error.
+- **No direct pushes to `main`.** Every change arrives by PR.
+- **Every PR states which commands were run** and what changed in
+  `outputs/analysis_summary.md`. That file is the shared source of truth for
+  every number in the README, the blog and the slides, so a diff in it is the
+  fastest way to see whether a change moved a published figure.
+- **Re-run the full pipeline before opening a PR.** Figures are rendered from
+  the summary CSVs, so a stale figure is a review-catchable error rather than a
+  silent one.
+- **Review checklist:** does the pipeline run end to end from a clean checkout;
+  does every rate in the diff carry its denominator; does any new claim in the
+  prose match `outputs/analysis_summary.md`; and does any new wording imply
+  per-trip risk, which this dataset cannot support (see §12).
