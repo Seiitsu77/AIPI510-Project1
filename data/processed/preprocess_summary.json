@@ -1,0 +1,22 @@
+{
+  "rows_raw": 487914,
+  "rows_analysed": 487914,
+  "date_min": "2021-01-01 00:00:00",
+  "date_max": "2025-12-31 23:58:00",
+  "years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "schema_notes": {
+    "number_of_cyclist_injured": "singular 'cyclist', not 'cyclists' as the project brief assumed",
+    "number_of_cyclist_killed": "singular 'cyclist', not 'cyclists'",
+    "number_of_motorist_injured": "singular 'motorist', not 'motorists'",
+    "number_of_motorist_killed": "singular 'motorist', not 'motorists'",
+    "vehicle_type_code1": "no underscore before the 1, unlike vehicle_type_code_3/_4/_5",
+    "crash_time": "stored as free text 'H:MM', not a time type",
+    "crash_date": "date only; the time of day lives entirely in crash_time"
+  }
+}
