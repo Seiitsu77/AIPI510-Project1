@@ -1,0 +1,10 @@
+column,n_missing,pct_missing
+zip_code,147495,30.23
+borough,147427,30.216
+latitude,38528,7.896
+longitude,38528,7.896
+vehicle_type_code1,7356,1.508
+contributing_factor_vehicle_1,3094,0.634
+crash_time,0,0.0
+number_of_persons_injured,0,0.0
+number_of_persons_killed,0,0.0

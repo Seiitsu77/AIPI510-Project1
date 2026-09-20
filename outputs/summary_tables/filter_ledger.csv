@@ -1,0 +1,2 @@
+step,rows_before,rows_after,rows_removed,pct_removed,reason
+none,487914,487914,0,0.0,no rows removed; server-side year filter already matched the analysis window

@@ -1,11 +1,15 @@
-# Raw data is large and re-downloadable via src/download_data.py -- do not commit.
+# The full raw extract is ~115 MB, over GitHub's 100 MB per-file hard limit, so
+# it cannot be committed. A 1,000-row sample and full regeneration instructions
+# are committed in its place (see data/raw/README.md).
 data/raw/*
 !data/raw/.gitkeep
 !data/raw/README.md
+!data/raw/sample_nyc_crashes_1000.csv
+!data/raw/*.meta.json
 
-# Processed data is regenerable from the raw extract.
-data/processed/*
-!data/processed/.gitkeep
+# The cleaned dataset (~23 MB) IS committed: it is the analysis-ready data and
+# fits comfortably inside GitHub's limits.
+!data/processed/crashes_clean.parquet
 
 # Python
 __pycache__/
