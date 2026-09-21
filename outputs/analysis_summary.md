@@ -286,6 +286,6 @@ write-up should say so.
 |---|---|---|
 | 1 | Crashes by hour | Establishes the intuitive expectation the story then complicates. |
 | 2 | Injury-crash rate by hour, with 95% CI | The first turn: the rate curve is not the count curve. |
-| 3 | Three clocks (count / injury rate / fatality rate, indexed) | The central finding. If only one figure survives, this is it. |
+| 3 | Three clocks (count / injury rate / fatality rate, separate axes) | The central finding. If only one figure survives, this is it. |
 | 4 | Day x hour heatmap of injury-crash rate | Shows the evening band holds across all seven days. |
 | 5 | Road-user casualty share by hour | The mechanism behind the evening peak, stated non-circularly. |

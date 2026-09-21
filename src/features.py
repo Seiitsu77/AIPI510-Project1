@@ -72,7 +72,10 @@ def assign_time_period(hour: pd.Series) -> pd.Series:
     """Map hour-of-day (0-23) onto the named bands above."""
     period = pd.Series(pd.NA, index=hour.index, dtype="object")
     for name, low, high in TIME_PERIOD_BOUNDS:
-        period = period.mask(hour.between(low, high), name)
+        # Nullable integer inputs produce <NA> in the boolean condition.
+        # Treat that as no match so missing hours remain unclassified.
+        in_period = hour.between(low, high).fillna(False)
+        period = period.mask(in_period, name)
     return pd.Categorical(period, categories=TIME_PERIOD_ORDER, ordered=True)
 
 

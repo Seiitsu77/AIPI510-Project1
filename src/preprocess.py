@@ -121,7 +121,9 @@ def parse_datetime(df: pd.DataFrame) -> pd.DataFrame:
     hour = pd.to_numeric(parts[0], errors="coerce")
     minute = pd.to_numeric(parts[1], errors="coerce") if parts.shape[1] > 1 else pd.Series(np.nan, index=out.index)
 
-    valid_clock = hour.between(0, 23) & minute.between(0, 59)
+    # Nullable string inputs can produce <NA> here. Treat missing clock parts
+    # as invalid rather than allowing fillna(0) below to turn them into 00:00.
+    valid_clock = (hour.between(0, 23) & minute.between(0, 59)).fillna(False)
     hour = hour.where(valid_clock)
     minute = minute.where(valid_clock)
 
@@ -203,8 +205,11 @@ def run(raw_path: Path, out_path: Path, tables_dir: Path, start_year: int, end_y
     print(f"[read] {len(df):,} rows x {df.shape[1]} columns")
 
     missing_cols = check_schema(df)
-    if any(c in missing_cols for c in ["crash_date", "crash_time", "collision_id"]):
-        raise SystemExit("[fail] a column the pipeline cannot run without is absent")
+    if missing_cols:
+        raise SystemExit(
+            "[fail] required columns absent from the raw extract: "
+            + ", ".join(missing_cols)
+        )
 
     ledger = FilterLedger(len(df))
 
