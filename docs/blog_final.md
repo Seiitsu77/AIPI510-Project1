@@ -50,7 +50,7 @@ Reported collisions rise throughout the day and peak between **5 and 6 PM**, wit
 
 ![Reported crashes by time of day](../figures/fig1_crashes_by_hour.png)
 
-At first, this looks like a familiar rush-hour story. More vehicles and people are moving through the city in the afternoon, so more collisions are reported.
+At first, this looks like a familiar rush-hour pattern: reported collisions rise through the day and peak during the evening commute.
 
 But the number of crashes is only one clock.
 
@@ -113,7 +113,7 @@ This became an important part of the story: before interpreting a pattern, the d
 
 ## The evening pattern is not just a weekend effect
 
-The late evening—approximately 8 PM to midnight—is the clearest period when both severity measures are elevated: it has a high injury share and the second-highest fatality rate of the day.
+The late-evening period also combines a relatively high injury share with an elevated fatality rate.
 
 Could this pattern be caused only by weekends?
 
