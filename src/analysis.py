@@ -449,7 +449,7 @@ def write_summary(df: pd.DataFrame, t: dict[str, pd.DataFrame], path: Path) -> N
         A(f"| {hour_range_label(r.crash_hour)} | {int(r.n):,} | {r.share_of_all_crashes_pct:.1f}% | "
           f"{r.rate_pct:.1f}% | {r.ci_low_pct:.1f}-{r.ci_high_pct:.1f}% | {int(r.fatal_crashes_excl_placeholder)} | {r.fatal_per_1k_excl_placeholder:.2f} |")
     A("")
-    A("* Fatal columns exclude the 8,527 records timestamped exactly 00:00 (see section 4); "
+    A("\\* Fatal columns exclude the 8,527 records timestamped exactly 00:00 (see section 4); "
       "all other columns use every record. Only the 12 AM row is affected.")
     A("")
     A("### 5.3 By time period")
