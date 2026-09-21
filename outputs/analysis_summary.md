@@ -89,9 +89,9 @@ The geographic fields are not, which is why they do not.
 | all hours, all records | 487,914 | 40.02% | 1,304 | 2.67 |
 | all hours, excluding 00:00 | 479,387 | 40.05% | 1,303 | 2.72 |
 
-**This is the decisive evidence.** Records stamped exactly `00:00` contain 1 fatal crash in 8,527 records. Every neighbouring hour of the night runs 50-70 fatal crashes on a smaller base. A genuine hour of the night cannot
-look like that, so `00:00` is behaving as a default value written when the true
-time was not known.
+**The strongest signal is the fatality count.** Records stamped exactly `00:00` contain 1 fatal crash among 8,527 records. By comparison, each hourly bin from 1-6 AM contains 53-62 fatal crashes among 8,678-11,741 records — a similar-sized base. This unusually large
+difference strongly suggests that many exact-midnight timestamps are placeholders
+used when the precise crash time was unknown.
 
 **Decision: flag, do not drop.** Their injury rate (38.61%) is close to the rest of hour 0 (38.37%), so the injury analysis is barely affected, and dropping 1.75% of the data non-randomly would cost more than it buys.
 The distortion is concentrated in one statistic — the hour-0 **fatality** rate, which
@@ -118,9 +118,9 @@ hurt someone. They are the times when it is *least* likely to:
 The reversal appears when severity is measured by death instead of injury.
 Overnight crashes are the **most** likely to be fatal: 7.14 per 1,000 at 3 AM-4 AM versus 1.08 at 4 PM-5 PM — a **6.6x** difference.
 
-*Sample-size caution:* the fatal-crash comparison rests on 1,304 fatal crashes spread across 24 hours (62 in the peak hour, 33 in the trough). The 95% Wilson intervals for the peak (5.58-9.15) and trough (0.77-1.52) do not overlap, so the
-contrast is real, but hour-to-hour wobble in the fatal series should not be
-over-read. Grouped into time periods (section 5.3) it is much more stable.
+*Sample-size caution:* the fatal-crash comparison rests on 1,304 fatal crashes spread across 24 hours (62 in the peak hour, 33 in the trough). The 95% Wilson intervals for the peak (5.58-9.15) and trough (0.77-1.52) do not overlap. Because the peak and trough were selected from 24 hours, these intervals are descriptive,
+not a multiple-comparison-adjusted test. The broader overnight-versus-afternoon contrast
+is more stable than the ranking of any single hour; see the grouped periods in section 5.3.
 
 ### 5.2 Hour-by-hour detail
 
@@ -164,8 +164,8 @@ over-read. Grouped into time periods (section 5.3) it is much more stable.
 | Night | 20:00-23:59 | 75,497 | 15.5% | 43.6% | 3.66 |
 
 Late Night carries 14.7% of reported crashes, the lowest injury-crash rate (35.2%) and the highest fatality rate (5.02 per 1,000). Night (43.6% injury, 3.66 fatal per 1,000) is the
-period where both measures are elevated together — the genuinely worst window on
-both counts. The Evening Commute has the most crashes (23.1% of all) and a high injury rate (43.9%) but a comparatively low fatality rate (2.02).
+period where both measures are elevated together — the clearest single window where
+the two measures point in the same direction. The Evening Commute has the most crashes (23.1% of all) and a high injury rate (43.9%) but a comparatively low fatality rate (2.02).
 
 ### 5.4 Day of week
 

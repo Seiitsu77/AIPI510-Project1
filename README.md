@@ -12,7 +12,7 @@ A reproducible analysis of 487,914 police-reported motor-vehicle collisions in N
 
 Most people carry a rough mental model of road danger: rush hour is chaos, and the small hours are when things get deadly. This project tests that model against five complete years of NYC's own collision records.
 
-It turns out both halves of the intuition are half right, and the interesting part is *how* they come apart. The hour with the most crashes, the hour when a crash is most likely to injure someone, and the hour when a crash is most likely to kill someone are **three different times of day**. Which one you call "the dangerous hour" depends entirely on which question you asked.
+It turns out both halves of the intuition are half right, and the interesting part is *how* they come apart. The hour with the most crashes, the hour when a reported crash is most likely to injure someone, and the hour when a reported crash is most likely to kill someone are **three different times of day**. Which one looks "most dangerous" depends on the outcome being measured.
 
 The project is built as a script pipeline, not a notebook, so the whole analysis regenerates from a single documented sequence of commands.
 
@@ -132,12 +132,12 @@ Figures are rendered from the summary CSVs, never from the raw data, so a chart 
 | Question | Peak | Value |
 |---|---|---|
 | When do crashes happen most? | **5–6 PM** | 30,591 crashes |
-| When is a crash most likely to injure someone? | **9–10 PM** | 45.3% |
-| When is a crash most likely to be fatal? | **3–4 AM** | 7.14 per 1,000 |
+| When is the injury share highest among reported crashes? | **9–10 PM** | 45.3% |
+| When is the fatality rate highest among reported crashes? | **3–4 AM** | 7.14 per 1,000 |
 
 **The hypothesis holds, but not in the expected direction.** Crash frequency and injury-crash rate do peak at different times — frequency at 5 PM, injury share about four hours later. But the quiet overnight hours are *not* when a crash is most likely to hurt someone; they are when it is **least** likely to (33.3% at 2–3 AM vs 45.3% at 9–10 PM).
 
-The intuition about the small hours is rescued only by changing the measure. Overnight crashes are the **most** likely to be fatal: **7.14 vs 1.08 fatal crashes per 1,000 — a 6.6× difference** between 3–4 AM and 4–5 PM. The 95% confidence intervals do not overlap.
+The intuition about the small hours reappears only when the outcome changes. Among reported crashes, the fatality rate is **7.14 vs 1.08 per 1,000 — a 6.6× descriptive difference** between 3–4 AM and 4–5 PM. The per-hour 95% confidence intervals do not overlap, but the endpoints were selected from 24 hours; the broader overnight-versus-afternoon contrast is more defensible than treating one exact hour as uniquely dangerous.
 
 So "severity" is not one thing. Ranked by injury share the overnight hours look safest; ranked by fatality rate they look worst. Both are true statements about the same crashes.
 
@@ -151,7 +151,7 @@ So "severity" is not one thing. Ranked by injury share the overnight hours look 
 | Evening Commute | 23.1% | **43.9%** | 2.02 |
 | Night | 15.5% | 43.7% | 3.66 |
 
-**Night (8 PM–midnight) is the one window where both measures are elevated together** — a high injury share *and* the second-highest fatality rate. If the analysis had to name a single worst window, this is the defensible answer.
+**Night (8 PM–midnight) is the one window where both measures are elevated together** — a high injury share *and* the second-highest fatality rate. It is the clearest single window where both measures point in the same direction.
 
 ### Supporting findings
 
@@ -185,7 +185,7 @@ Each is exported as PNG (200 dpi) and SVG, carries a plain-language title, units
 
 **4. Missing data are not random.** `borough` is missing on **30.2%** of crashes — the largest single category, bigger than Brooklyn. Highway crashes disproportionately lack one. Coordinates are missing on 7.9%. This is why borough comparisons are supporting context only and never a ranking, and why there is no map.
 
-**5. Timestamp quality — and a finding that came out of it.** `crash_time` is never null, but exactly `00:00` appears 8,527 times, roughly twice as often as any other single clock minute. The decisive evidence that it is a placeholder: those 8,527 records contain **1 fatal crash**, while every neighbouring hour of the night runs 50–70 on a smaller base. A real hour of the night cannot look like that. They are **flagged, not dropped** (dropping 1.75% of data non-randomly costs more than it buys), and the figure showing fatality by hour excludes them and says so.
+**5. Timestamp quality — and a finding that came out of it.** `crash_time` is never null, but exactly `00:00` appears 8,527 times, roughly twice as often as any other single clock minute. Those records contain **1 fatal crash**. By comparison, each hourly bin from 1–6 AM contains 53–62 fatal crashes among 8,678–11,741 records — a similar-sized base. This unusually large difference strongly suggests that many exact-midnight timestamps are placeholders for an unknown time. They are **flagged, not dropped** (dropping 1.75% of data non-randomly costs more than it buys), and the figure showing fatality by hour excludes them and says so.
 
 **6. Human impact.** Behind 1,304 fatal crashes are people and families. This analysis describes patterns in administrative records; it does not assign blame to individuals, and readers should not infer any. Fatality figures are reported as rates with their sample sizes rather than dramatised.
 

@@ -294,6 +294,13 @@ def write_summary(df: pd.DataFrame, t: dict[str, pd.DataFrame], path: Path) -> N
     swing_overall = (peak_inj["rate"] - trough_inj["rate"]) * 100
     swing_nv = (nv_peak["rate"] - nv_trough["rate"]) * 100
     fatal_ratio = peak_fatal["fatal_per_1k_excl_placeholder"] / trough_fatal["fatal_per_1k_excl_placeholder"]
+    midnight_n = int(sens.loc["hour 0, exactly 00:00 only", "n"])
+    midnight_fatal = int(sens.loc["hour 0, exactly 00:00 only", "fatal_crashes"])
+    early_morning = h[h["crash_hour"].between(1, 5)]
+    early_n_min = int(early_morning["n"].min())
+    early_n_max = int(early_morning["n"].max())
+    early_fatal_min = int(early_morning["fatal_crashes"].min())
+    early_fatal_max = int(early_morning["fatal_crashes"].max())
 
     L = []
     A = L.append
@@ -382,8 +389,8 @@ def write_summary(df: pd.DataFrame, t: dict[str, pd.DataFrame], path: Path) -> N
     A("## 4. Data-quality finding: the `00:00` placeholder")
     A("")
     A(f"`crash_time` is never null, but exactly-midnight is recorded "
-      f"{int(sens.loc['hour 0, exactly 00:00 only', 'n']):,} times "
-      f"({int(sens.loc['hour 0, exactly 00:00 only', 'n']) / n_total * 100:.2f}% of all crashes) — "
+      f"{midnight_n:,} times "
+      f"({midnight_n / n_total * 100:.2f}% of all crashes) — "
       "roughly twice as often as any other single clock minute.")
     A("")
     A("| Subset | n | Injury-crash rate | Fatal crashes | Fatal per 1,000 |")
@@ -391,17 +398,17 @@ def write_summary(df: pd.DataFrame, t: dict[str, pd.DataFrame], path: Path) -> N
     for label, r in sens.iterrows():
         A(f"| {label} | {int(r.n):,} | {r.injury_rate_pct:.2f}% | {int(r.fatal_crashes):,} | {r.fatal_per_1k:.2f} |")
     A("")
-    A("**This is the decisive evidence.** Records stamped exactly `00:00` contain "
-      f"{_plural(int(sens.loc['hour 0, exactly 00:00 only', 'fatal_crashes']), 'fatal crash')} in "
-      f"{int(sens.loc['hour 0, exactly 00:00 only', 'n']):,} records. Every neighbouring hour of the "
-      "night runs 50-70 fatal crashes on a smaller base. A genuine hour of the night cannot")
-    A("look like that, so `00:00` is behaving as a default value written when the true")
-    A("time was not known.")
+    A("**The strongest signal is the fatality count.** Records stamped exactly `00:00` contain "
+      f"{_plural(midnight_fatal, 'fatal crash')} among {midnight_n:,} records. By comparison, "
+      f"each hourly bin from 1-6 AM contains {early_fatal_min}-{early_fatal_max} fatal crashes among "
+      f"{early_n_min:,}-{early_n_max:,} records — a similar-sized base. This unusually large")
+    A("difference strongly suggests that many exact-midnight timestamps are placeholders")
+    A("used when the precise crash time was unknown.")
     A("")
     A("**Decision: flag, do not drop.** Their injury rate "
       f"({sens.loc['hour 0, exactly 00:00 only', 'injury_rate_pct']:.2f}%) is close to the rest of hour 0 "
       f"({sens.loc['hour 0, excluding 00:00', 'injury_rate_pct']:.2f}%), so the injury analysis is barely "
-      "affected, and dropping 1.75% of the data non-randomly would cost more than it buys.")
+      f"affected, and dropping {midnight_n / n_total * 100:.2f}% of the data non-randomly would cost more than it buys.")
     A("The distortion is concentrated in one statistic — the hour-0 **fatality** rate, which")
     A(f"reads {sens.loc['hour 0, all records', 'fatal_per_1k']:.2f} per 1,000 with these records and "
       f"{sens.loc['hour 0, excluding 00:00', 'fatal_per_1k']:.2f} without them. "
@@ -437,9 +444,10 @@ def write_summary(df: pd.DataFrame, t: dict[str, pd.DataFrame], path: Path) -> N
       f"spread across 24 hours ({int(peak_fatal.fatal_crashes)} in the peak hour, "
       f"{int(trough_fatal.fatal_crashes)} in the trough). The 95% Wilson intervals for the peak "
       f"({peak_fatal.fatal_per_1k_excl_low:.2f}-{peak_fatal.fatal_per_1k_excl_high:.2f}) and trough "
-      f"({trough_fatal.fatal_per_1k_excl_low:.2f}-{trough_fatal.fatal_per_1k_excl_high:.2f}) do not overlap, so the")
-    A("contrast is real, but hour-to-hour wobble in the fatal series should not be")
-    A("over-read. Grouped into time periods (section 5.3) it is much more stable.")
+      f"({trough_fatal.fatal_per_1k_excl_low:.2f}-{trough_fatal.fatal_per_1k_excl_high:.2f}) do not overlap. "
+      "Because the peak and trough were selected from 24 hours, these intervals are descriptive,")
+    A("not a multiple-comparison-adjusted test. The broader overnight-versus-afternoon contrast")
+    A("is more stable than the ranking of any single hour; see the grouped periods in section 5.3.")
     A("")
     A("### 5.2 Hour-by-hour detail")
     A("")
@@ -449,7 +457,7 @@ def write_summary(df: pd.DataFrame, t: dict[str, pd.DataFrame], path: Path) -> N
         A(f"| {hour_range_label(r.crash_hour)} | {int(r.n):,} | {r.share_of_all_crashes_pct:.1f}% | "
           f"{r.rate_pct:.1f}% | {r.ci_low_pct:.1f}-{r.ci_high_pct:.1f}% | {int(r.fatal_crashes_excl_placeholder)} | {r.fatal_per_1k_excl_placeholder:.2f} |")
     A("")
-    A("\\* Fatal columns exclude the 8,527 records timestamped exactly 00:00 (see section 4); "
+    A(f"\\* Fatal columns exclude the {midnight_n:,} records timestamped exactly 00:00 (see section 4); "
       "all other columns use every record. Only the 12 AM row is affected.")
     A("")
     A("### 5.3 By time period")
@@ -465,8 +473,8 @@ def write_summary(df: pd.DataFrame, t: dict[str, pd.DataFrame], path: Path) -> N
     A(f"Late Night carries {late.share_of_all_crashes_pct:.1f}% of reported crashes, the lowest injury-crash "
       f"rate ({late.rate_pct:.1f}%) and the highest fatality rate ({late.fatal_per_1k:.2f} per 1,000). "
       f"Night ({night.rate_pct:.1f}% injury, {night.fatal_per_1k:.2f} fatal per 1,000) is the")
-    A("period where both measures are elevated together — the genuinely worst window on")
-    A("both counts. The Evening Commute has the most crashes "
+    A("period where both measures are elevated together — the clearest single window where")
+    A("the two measures point in the same direction. The Evening Commute has the most crashes "
       f"({evening.share_of_all_crashes_pct:.1f}% of all) and a high injury rate "
       f"({evening.rate_pct:.1f}%) but a comparatively low fatality rate ({evening.fatal_per_1k:.2f}).")
     A("")
