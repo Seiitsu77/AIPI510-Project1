@@ -449,7 +449,7 @@ def write_summary(df: pd.DataFrame, t: dict[str, pd.DataFrame], path: Path) -> N
         A(f"| {hour_range_label(r.crash_hour)} | {int(r.n):,} | {r.share_of_all_crashes_pct:.1f}% | "
           f"{r.rate_pct:.1f}% | {r.ci_low_pct:.1f}-{r.ci_high_pct:.1f}% | {int(r.fatal_crashes_excl_placeholder)} | {r.fatal_per_1k_excl_placeholder:.2f} |")
     A("")
-    A("\* Fatal columns exclude the 8,527 records timestamped exactly 00:00 (see section 4); "
+    A("* Fatal columns exclude the 8,527 records timestamped exactly 00:00 (see section 4); "
       "all other columns use every record. Only the 12 AM row is affected.")
     A("")
     A("### 5.3 By time period")
@@ -616,7 +616,7 @@ def write_summary(df: pd.DataFrame, t: dict[str, pd.DataFrame], path: Path) -> N
     A("|---|---|---|")
     A("| 1 | Crashes by hour | Establishes the intuitive expectation the story then complicates. |")
     A("| 2 | Injury-crash rate by hour, with 95% CI | The first turn: the rate curve is not the count curve. |")
-    A("| 3 | Three clocks (count / injury rate / fatality rate, indexed) | The central finding. If only one figure survives, this is it. |")
+    A("| 3 | Three clocks (count / injury rate / fatality rate, separate axes) | The central finding. If only one figure survives, this is it. |")
     A("| 4 | Day x hour heatmap of injury-crash rate | Shows the evening band holds across all seven days. |")
     A("| 5 | Road-user casualty share by hour | The mechanism behind the evening peak, stated non-circularly. |")
     A("")

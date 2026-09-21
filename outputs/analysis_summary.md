@@ -151,7 +151,7 @@ over-read. Grouped into time periods (section 5.3) it is much more stable.
 | 10 PM-11 PM | 18,180 | 3.7% | 43.2% | 42.4-43.9% | 76 | 4.18 |
 | 11 PM-12 AM | 16,504 | 3.4% | 40.2% | 39.4-40.9% | 70 | 4.24 |
 
-\* Fatal columns exclude the 8,527 records timestamped exactly 00:00 (see section 4); all other columns use every record. Only the 12 AM row is affected.
+* Fatal columns exclude the 8,527 records timestamped exactly 00:00 (see section 4); all other columns use every record. Only the 12 AM row is affected.
 
 ### 5.3 By time period
 
@@ -286,6 +286,6 @@ write-up should say so.
 |---|---|---|
 | 1 | Crashes by hour | Establishes the intuitive expectation the story then complicates. |
 | 2 | Injury-crash rate by hour, with 95% CI | The first turn: the rate curve is not the count curve. |
-| 3 | Three clocks (count / injury rate / fatality rate, indexed) | The central finding. If only one figure survives, this is it. |
+| 3 | Three clocks (count / injury rate / fatality rate, separate axes) | The central finding. If only one figure survives, this is it. |
 | 4 | Day x hour heatmap of injury-crash rate | Shows the evening band holds across all seven days. |
 | 5 | Road-user casualty share by hour | The mechanism behind the evening peak, stated non-circularly. |

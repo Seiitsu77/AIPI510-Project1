@@ -208,6 +208,16 @@ python src/analysis.py
 python src/visualize.py
 ```
 
+Run the automated unit tests before opening a pull request:
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+The tests cover time-period boundaries, outcome flags, rate calculations,
+timestamp parsing, casualty cleaning, and required-column validation. GitHub
+Actions runs the same test suite automatically for every pull request.
+
 Each script creates the directories it needs and is safe to re-run. `download_data.py` skips the download if the file already exists (use `--force` to refresh).
 
 Expected outputs:
