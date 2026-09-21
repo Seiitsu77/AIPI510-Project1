@@ -252,6 +252,9 @@ The **full raw extract is not**, and cannot be: at ~115 MB it exceeds GitHub's 1
 ├── README.md
 ├── requirements.txt
 ├── .gitignore
+├── .github/
+│   └── workflows/
+│       └── tests.yml         # runs the unit tests on every pull request
 │
 ├── data/
 │   ├── raw/                  # 1,000-row sample + retrieval metadata
@@ -265,6 +268,10 @@ The **full raw extract is not**, and cannot be: at ~115 MB it exceeds GitHub's 1
 │   ├── analysis.py           # summary tables + auto-written evidence base
 │   └── visualize.py          # the 5 final figures
 │
+├── tests/
+│   ├── test_features.py      # time periods, outcome flags, rates and CIs
+│   └── test_preprocess.py    # timestamp parsing, casualty cleaning, schema checks
+│
 ├── notebooks/
 │   └── eda.ipynb             # exploration only; imports from src/, defines no logic
 │
@@ -272,9 +279,10 @@ The **full raw extract is not**, and cannot be: at ~115 MB it exceeds GitHub's 1
 │
 ├── outputs/
 │   ├── summary_tables/       # one CSV per question asked of the data
-│   └── analysis_summary.md   # evidence base for blog + slides
+│   └── analysis_summary.md   # evidence base for the blog and slides
 │
 └── docs/
+    ├── blog_final.md         # the published blog post
     ├── blog_draft.md
     └── presentation_outline.md
 ```
